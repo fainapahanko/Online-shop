@@ -72,7 +72,7 @@
         console.log(item)
         deleteItem(item)
         let div = document.querySelector("#div"+item)
-        div.innerHTML = ""
+        div.innerHTML = await ""
       }
       handleSubmit = async() => {
         event.preventDefault(); //preventing the default browser event handling

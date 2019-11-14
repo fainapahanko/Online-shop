@@ -13,9 +13,10 @@ loadItems = async() => {
     let jsonResp = await resp.json()
     document.querySelector("#shopcart").innerHTML = jsonResp.map(product => 
     `
-    <div class="col-ms-4">
+    <div class="col-ms-4 cards">
         <img src="${product.imageUrl}" style="width:300px; height="300px" />
-        <h1 href="detailspage.html?productId=${product._id}">${product.brand} - $ ${product.price} </h1>
+        <h3 href="detailspage.html?productId=${product._id}">${product.name}</h3>
+        <h3>${product.price}</h3>
     </div>
     `
     ).join("")
@@ -25,17 +26,23 @@ loadItems = async() => {
 loadItemsBackOffice = async() => {
         const events = await getEvents();
         console.log("events", events)
-
         let itemsList = document.querySelector("#itemsList")
-        itemsList.innerHTML = events.map(event => 
-        `
-          <div>
-            <div id="div${event._id}">
-              <h4>${event.name} - $${event.price}</h4> 
-              <a role="button" id="${event._id}"  class="btn btn-delete btn-danger" onclick="deleteItem(this.id)">Delete</a>
+
+        if(events.length > 0){
+            itemsList.innerHTML = events.map(event => 
+            `
+            <div>
+                <div id="div${event._id}">
+                <h4>${event.name} - $${event.price}</h4> 
+                <a role="button" id="${event._id}"  class="btn btn-delete btn-danger" onclick="deleteItem(this.id)">Delete</a>
+                </div>
             </div>
-          </div>
-        `).join("")
+            `).join("")
+        } else {
+            itemsList.innerHTML = `
+            <h2>No items at the moment</h2>
+            `
+        } 
 }
 
 deleteItem = async (id) => {
