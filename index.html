@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+<!-- Bootstrap CSS -->
+<link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous"
+/>
+<link rel="stylesheet" href="style.css">
+<!--
+        You are building the new Amazon.
+        This time you are also responsible for the back office.
+        THIS is you CRUD endpoint
+        https://strive-school-testing-apis.herokuapp.com/api/product/
+        The product model is
+        {
+            "_id": "5d318e1a8541744830bef139", //SERVER GENERATED
+            "name": "app test 1",  //REQUIRED
+            "description": "somthing longer", //REQUIRED
+            "brand": "nokia", //REQUIRED
+            "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
+            "price": 100, //REQUIRED
+            "userId": "admin", //SERVER GENERATED
+            "createdAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+            "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+            "__v": 0 //SERVER GENERATED
+        }
+        EVERY REST API CALL SHOULD BE AUTHENTICATED. You should have received a couple of username and password to use them with basic authentication.
+        To use Basic Auth, add to your fetch an header like:
+        Authorization: Basic ###########
+        Where ######### is the base64 version of username:password
+        Today you have to implement:
+        - A backoffice page, where you can insert the product by specifying the parameters
+        - A front page, where the user can see the available products
+        You can also start from the previous marketplace.
+    -->
+</head>
+  <body>
+    <main role="main">
+        <section class="jumbotron text-center">
+            <div class="container">
+                <a role="button" class="btn btn-light" href="backoffice.html">Go to back office</a>
+                <h1 class="jumbotron-heading">SHOPPING CENTER</h1>
+                <p class="lead text-muted">
+                Search amoung our products
+                </p>
+                <div class="container">
+                <input
+                    type="text"
+                    value=""
+                    placeholder="Search for an item"
+                    id="query"
+                />
+                <p class="lead" id="searchError"></p>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <ul class="list-group list-group-horizontal row" id="shopcart">
+            </ul>
+        </div>
+
+​
+        <div class="album py-5 bg-light">
+            <div class="container">
+            </div>
+        </div>
+      </main>
+      <!-- end of main -->
+      <footer class="text-muted">
+        <div class="container">
+          <p class="float-right">
+            <a href="#">Back to top</a>
+          </p>
+          <p>
+            Album example is &copy; Bootstrap, but please download and customize
+            it for yourself!
+          </p>
+        </div>
+      </footer>
+
+    <script>
+
+
+        window.onload = async() => {
+            loadItems()
+        }
+
+
+        createProduct = async(product) => {
+
+            let username = "user15"
+            let password = "sHHU5KWmVE26avC8"
+            let token = btoa(username + ":" + password)
+
+            let resp = await fetch(ulr, {
+                method:"POST",
+                body: JSON.stringify(product),
+                headers: {
+                "authorization" : "Basic " + token,
+                "Content-Type": "application/json"
+            }
+            })
+            let jsonResp = await resp.json()
+            console.log(jsonResp)
+        }
+
+        </script>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="main.js"></script>
+  </body>
+</html>

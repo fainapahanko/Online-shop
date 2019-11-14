@@ -1,0 +1,102 @@
+ <!doctype html>
+ <html lang="en">
+   <head>
+     <title>Title</title>
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+      <div class="container py-4">
+       <h1>Add an item</h1>
+       <a role="button" class="btn btn-light" href="index.html">Go back</a>
+        <div class="row">
+         <div class="col-md-6">
+           <form style="width:500px">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter name" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Description</label>
+                <input type="text" class="form-control" id="description" style="height:50px" placeholder="Description" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Brand</label>
+                <input type="text" class="form-control" id="brand" placeholder="Brand" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">ImageUrl</label>
+                <input type="text" class="form-control" id="imageUrl" placeholder="ImageUrl" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Price</label>
+                <input type="number" class="form-control" id="price" placeholder="Price" required>
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="handleSubmit()">Submit</button>
+            </form>
+         </div>
+         <div class="col-md-6">
+            <div id="itemsList">
+            </div>
+         </div>
+        </div>
+      </div>
+      <!--
+              {
+        "_id": "5d318e1a8541744830bef139", //SERVER GENERATED
+        "name": "app test 1",  //REQUIRED
+        "description": "somthing longer", //REQUIRED
+        "brand": "nokia", //REQUIRED
+        "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
+        "price": 100, //REQUIRED
+        "userId": "admin", //SERVER GENERATED
+        "createdAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+        "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+        "__v": 0 //SERVER GENERATED
+    }
+      -->
+     <!-- Optional JavaScript -->
+     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+     <script>
+
+      window.onload = async() => {
+        loadItemsBackOffice()
+      }
+      deleteItem = async event_id => {
+        let item = event_id
+        console.log(item)
+        deleteItem(item)
+        let div = document.querySelector("#div"+item)
+        div.innerHTML = ""
+      }
+      handleSubmit = async() => {
+        event.preventDefault(); //preventing the default browser event handling
+        const newItem = {
+          name: document.querySelector("#name").value,
+          description: document.querySelector("#description").value,
+          brand: document.querySelector("#brand").value,
+          imageUrl: document.querySelector("#imageUrl").value,
+          price: document.querySelector("#price").value,
+        }
+        console.log("new item", JSON.stringify(newItem))
+        const response = await saveEvent(newItem)
+        loadItemsBackOffice()
+        if (response.ok) {
+          //checking the ok property which stores the successfull result of the operation
+          console.log("the event was saved successfully");
+        } else {
+          console.log("the event was NOT saved successfully");
+        }
+      }
+     </script>
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+     <script src="main.js"></script>
+   </body>
+ </html>
