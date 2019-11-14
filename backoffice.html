@@ -13,13 +13,14 @@
    <body>
       <div class="container py-4">
        <h1>Add an item</h1>
-       <a role="button" class="btn btn-light" href="index.html">Go back</a>
+       <a role="button" class="btn btn-light" href="index.html">Back to shop</a>
+       <a role="button" class="btn btn-light" href="backoffice.html">Return</a>
         <div class="row">
          <div class="col-md-6">
-           <form style="width:500px">
+           <form style="width:500px" onsubmit="handleSubmit()">
               <div class="form-group">
                 <label for="exampleInputEmail1">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter name" required>
+                <input type="text\number" class="form-control" id="name" placeholder="Enter name" required>
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Description</label>
@@ -37,10 +38,18 @@
                 <label for="exampleInputPassword1">Price</label>
                 <input type="number" class="form-control" id="price" placeholder="Price" required>
               </div>
-              <button type="submit" class="btn btn-primary" onclick="handleSubmit()">Submit</button>
+              <input
+                id="submitBtn"
+                type="submit"
+                class="btn btn-primary"
+                value="Submit event"
+              />
             </form>
          </div>
          <div class="col-md-6">
+            <div class="spinner-border text-primary" id="back-office-spinner" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
             <div id="itemsList">
             </div>
          </div>
@@ -59,23 +68,67 @@
         "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
         "__v": 0 //SERVER GENERATED
     }
+                - In the backoffice page
+                a) Add the chance to EDIT a single product
+                b) Add the chance to DELETE a single product
+                c) Add validation to before trying to create the product
+                d) Add error message if something went wrong
       -->
      <!-- Optional JavaScript -->
      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
      <script>
+      var currentItem = undefined;
+
+      showSpinner = () => {
+        let spinner = document.querySelector("#back-office-spinner")
+        spinner.style.display ="block"
+      }
+
+      hideSpinner = () => {
+        let spinner = document.querySelector("#back-office-spinner")
+        spinner.style.display ="none"
+      }
 
       window.onload = async() => {
-        loadItemsBackOffice()
+        showSpinner()
+        const urlParams = new URLSearchParams(window.location.search)
+        const id = urlParams.get("id")
+        if(id) {
+          currentItem = await getEvent(id)
+
+          document.querySelector("#name").value = currentItem.name
+          document.querySelector("#description").value = currentItem.description
+          document.querySelector("#brand").value = currentItem.brand
+          document.querySelector("#imageUrl").value = currentItem.imageUrl
+          document.querySelector("#price").value = currentItem.price
+
+          document.querySelector("#submitBtn").value = "UPDATE"
+        } else {
+          document.querySelector("#submitBtn").value = "SUBMIT"
+        }
+        await loadItemsBackOffice()
+        hideSpinner()
       }
-      deleteItem = async event_id => {
-        let item = event_id
-        console.log(item)
-        deleteItem(item)
-        let div = document.querySelector("#div"+item)
-        div.innerHTML = await ""
+
+      deleteItem = async (id) => {
+        let btn = event.currentTarget
+        showSpinner()
+        let success = await deleteEvent(id)
+
+        if(success){
+          var div = document.querySelector("#div"+id)
+          div.innerHTML = ""
+        } else{
+          console.log("smth went wrong")
+        }
+        hideSpinner()
       }
+
       handleSubmit = async() => {
         event.preventDefault(); //preventing the default browser event handling
+        let itemsList = document.querySelector("#itemsList")
+        itemsList.style.display = "none"
+        showSpinner()
         const newItem = {
           name: document.querySelector("#name").value,
           description: document.querySelector("#description").value,
@@ -83,16 +136,22 @@
           imageUrl: document.querySelector("#imageUrl").value,
           price: document.querySelector("#price").value,
         }
-        console.log("new item", JSON.stringify(newItem))
-        const response = await saveEvent(newItem)
-        loadItemsBackOffice()
+        let response
+        console.log(newItem)
+        itemsList.style.display = "block"
+        if(currentItem) { response = await updateEvent(currentItem._id, newItem) }
+        else{ response = await saveEvent(newItem) }
+        hideSpinner()
+
         if (response.ok) {
           //checking the ok property which stores the successfull result of the operation
           console.log("the event was saved successfully");
+          await loadItemsBackOffice()
         } else {
           console.log("the event was NOT saved successfully");
         }
       }
+
      </script>
      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

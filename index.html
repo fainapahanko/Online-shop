@@ -8,12 +8,7 @@
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
 />
 <!-- Bootstrap CSS -->
-<link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-    crossorigin="anonymous"
-/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css">
 <!--
         You are building the new Amazon.
@@ -41,6 +36,18 @@
         - A backoffice page, where you can insert the product by specifying the parameters
         - A front page, where the user can see the available products
         You can also start from the previous marketplace.
+        Today you have to implement:
+​
+            - In the backoffice page
+                a) Add the chance to EDIT a single product
+                b) Add the chance to DELETE a single product
+                c) Add validation to before trying to create the product
+                d) Add error message if something went wrong
+​
+            - In the front page
+                a) add a loader while waiting for the product to load
+                b) add a link on each item to go to a detail page
+​
     -->
 </head>
   <body>
@@ -53,23 +60,19 @@
                 Search amoung our products
                 </p>
                 <div class="container">
-                <input
-                    type="text"
-                    value=""
-                    placeholder="Search for an item"
-                    id="query"
-                />
-                <p class="lead" id="searchError"></p>
+                    <input
+                        type="text"
+                        value=""
+                        placeholder="Search for an item"
+                        id="query"
+                    />
+                    <p class="lead" id="searchError"></p>
                 </div>
             </div>
         </section>
-        <div class="container">
-            <ul class="list-group list-group-horizontal row" id="shopcart">
-            </ul>
-        </div>
-
-​
-        <div class="album py-5 bg-light">
+        <div class="items-container">
+            <div class="row" id="shopcart">
+            </div>
         </div>
       </main>
       <!-- end of main -->

@@ -3,6 +3,22 @@ let username = "user15"
 let password = "sHHU5KWmVE26avC8"
 let token = btoa(username + ":" + password)
 
+loadItem = async(id) => {
+    let event = await getEvent(id)
+    console.log("event", event)
+    document.querySelector("#item-div").innerHTML = `
+    <div>
+        <img src="${event.imageUrl}" class="item-img" />
+    </div>    
+    <div>
+        <h4>${event.name}</h4>
+    </div>
+    <div>
+        <h4> ${event.price}</h4>
+    </div>
+`
+}
+
 loadItems = async() => {
     
     let resp = await fetch(url,{
@@ -13,10 +29,16 @@ loadItems = async() => {
     let jsonResp = await resp.json()
     document.querySelector("#shopcart").innerHTML = jsonResp.map(product => 
     `
-    <div class="col-ms-4 cards">
-        <img src="${product.imageUrl}" style="width:300px; height="300px" />
-        <h3 href="detailspage.html?productId=${product._id}">${product.name}</h3>
-        <h3>${product.price}</h3>
+    <div class="col-ms-3 cards">
+        <div>
+            <img src="${product.imageUrl}" class="item-img" />
+        </div>    
+        <div>
+            <h4> <a href="detailspage.html?productId=${product._id}" class="col-12">${product.name}</a></h4>
+        </div>
+        <div>
+            <h4> ${product.price}</h4>
+        </div>
     </div>
     `
     ).join("")
@@ -24,6 +46,7 @@ loadItems = async() => {
 }
 
 loadItemsBackOffice = async() => {
+
         const events = await getEvents();
         console.log("events", events)
         let itemsList = document.querySelector("#itemsList")
@@ -31,10 +54,11 @@ loadItemsBackOffice = async() => {
         if(events.length > 0){
             itemsList.innerHTML = events.map(event => 
             `
-            <div>
+            <div class="item-element">
                 <div id="div${event._id}">
                 <h4>${event.name} - $${event.price}</h4> 
-                <a role="button" id="${event._id}"  class="btn btn-delete btn-danger" onclick="deleteItem(this.id)">Delete</a>
+                <a role="button" id="${event._id}"  class="btn btn-delete btn-danger" onclick="deleteItem('${event._id}')">Delete</a>
+                <a role="button" id="${event._id}"  class="btn btn-delete btn-secondary" href="backoffice.html?id=${event._id}">Edit</a>
                 </div>
             </div>
             `).join("")
@@ -45,15 +69,23 @@ loadItemsBackOffice = async() => {
         } 
 }
 
-deleteItem = async (id) => {
-    let response = await fetch(url + "\\" + id, {
+deleteEvent = async (event_id) => {
+    const response = await fetch(url +  event_id, {
         method: "DELETE",
         headers: {
             "authorization" : "Basic " + token,
         }
     })
-    let resp = await response.json()
+    return response.ok
+}
 
+getEvent = async(id) => {
+    const response = await fetch(url + id, {
+        headers: {
+            "authorization" : "Basic " + token,
+        }
+    })
+    return await response.json()
 }
 
 getEvents = async() => {
@@ -67,7 +99,7 @@ getEvents = async() => {
 
 saveEvent = async event => {
 
-    let response = await fetch(url, {
+    const response = await fetch(url, {
         method:"POST",
         body: JSON.stringify(event),
         headers: {
@@ -76,4 +108,18 @@ saveEvent = async event => {
     }
     })
     return response
+}
+
+updateEvent = async (id, event) => {
+
+    let response = await fetch(url + id, {
+        method:"PUT",
+        body: JSON.stringify(event),
+        headers: {
+        "authorization" : "Basic " + token,
+        "Content-Type": "application/json"
+    }
+    })
+    return response
+
 }

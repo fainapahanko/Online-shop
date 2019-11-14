@@ -1,6 +1,22 @@
 .btn-delete{
     color: white !important;
 }
-.cards h3{
+.cards h4{
     text-align: center;
+}
+#back-office-spinner{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.item-img {
+    width: 250px;
+    height: 250px;
+}
+a{
+    color:black;
+    text-align: center;
+}
+.items-container{
+    margin:50px 180px;
 }
